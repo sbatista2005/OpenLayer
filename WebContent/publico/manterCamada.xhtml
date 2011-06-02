@@ -1,0 +1,240 @@
+<?xml version="1.0" encoding="ISO-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich">
+<f:view>
+	<head>
+<title>Projeto OpenLayer - MongoDB</title>
+
+<link rel="stylesheet" href="js/OpenLayers-2.10/theme/default/style.css"
+	type="text/css" />
+<link rel="stylesheet" href="style.css" type="text/css" />
+<script src="js/OpenLayers-2.10/OpenLayers.js" charset='UTF-8'></script>
+
+<style type="text/css">
+#map {
+	width: 100%;
+	height: 350px;
+	border: 1px solid gray;
+	width: 100%;
+    z-index:0;
+    position:absolute;
+}
+
+p {
+	width: 500px;
+}
+
+div.olControlMousePosition {
+	font-family: Verdana;
+	font-size: 0.5em;
+	color: red;
+}
+</style>
+
+
+<script type="text/javascript" charset='UTF-8'>
+	var lon = -38;
+	var lat = -12;
+	var zoom = 4;
+	var map, layer;
+	function addWMS(titulo, end, camada, isBase) {
+		var trans = true;
+		if (isBase) {
+			trans = false;
+		}
+		var layerWMS = new OpenLayers.Layer.WMS(titulo, end, {
+			layers : camada,
+			transparent : trans,
+			format : 'image/gif'
+		}, {
+			isBaseLayer : isBase
+		});
+		map.addLayer(layerWMS);
+	}
+	function execAdd(row) {
+		alert(row);
+		var tituloStr = 'formResultados:auction:' + row + ':titulo';
+		var endStr = 'formResultados:auction:' + row + ':end';
+		var camadaStr = 'formResultados:auction:' + row + ':layer';
+		
+		//titulo = document.getElementById('formID:dataTableId:rowNumber:titulo');
+		var titulo = document.getElementById(tituloStr).value; 
+		alert(titulo);
+		var end = document.getElementById(endStr).value;
+		alert(end);
+		var camadas = document.getElementById(camadaStr).value;
+		alert(camadas);
+		
+		addWMS(titulo, end , camadas , false);
+	}
+	function init() {
+		map = new OpenLayers.Map('map');
+		addWMS("Mapa", "http://vmap0.tiles.osgeo.org/wms/vmap0", "basic", true);
+		map.setCenter(new OpenLayers.LonLat(lon, lat), zoom);
+		map.addControl(new OpenLayers.Control.LayerSwitcher());
+	}
+</script>
+
+	</head>
+	<body onload="init()">
+
+
+		<a4j:keepAlive beanName="manterCamadaMB"></a4j:keepAlive>
+
+		<h:form id="formCadastrarCamada">
+			<fieldset>
+				<legend>Cadastrar Camada</legend>
+
+				<h:panelGrid columns="2" id="inputs"
+					columnClasses="coluna1, coluna2">
+
+					<h:outputLabel for="Titulo" value="Título" />
+					<h:inputText id="titulo" value="#{manterCamadaMB.camada.titulo}"
+						required="true" requiredMessage="Camada  obrigatório!" size="40" />
+
+					<h:outputLabel for="Endereco" styleClass="label" value="Endereço" />
+					<h:inputText id="endereco"
+						value="#{manterCamadaMB.camada.endereco}" required="true"
+						requiredMessage="End  obrigatório!" styleClass="edit" size="40" />
+
+					<h:outputLabel for="Layer" styleClass="label" value="Layer" />
+					<h:inputText id="layer" value="#{manterCamadaMB.camada.layer}"
+						required="true" requiredMessage="Layer obrigatório!"
+						styleClass="edit" size="40" />
+
+					<a4j:commandButton value="Salvar" action="#{manterCamadaMB.save}"
+						status="sts" reRender="inputs, messages, formResultados"
+						styleClass="botoes"
+						oncomplete="Richfaces.showModalPanel('mensagem')" />
+
+					<a4j:commandButton value="Voltar" immediate="true"
+						reRender="inputs" styleClass="botoes" />
+				</h:panelGrid>
+			</fieldset>
+		</h:form>
+
+
+
+
+		<h:form id="formResultados">
+
+			<rich:dataTable id="auction" value="#{manterCamadaMB.camadas}"
+				var="item" rows="10" width="100%" rowKeyVar="row"
+				onRowMouseOver="this.style.backgroundColor='#B5F3FB'"
+				onRowMouseOut="this.style.backgroundColor='#FFFFFF'">
+				<f:facet name="caption">
+					Registros encontrados: 
+				</f:facet>
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Título" />
+					</f:facet>
+					<h:inputText id="titulo" name="titulo" title="Titulo"
+						value="#{item.titulo}" />
+				</rich:column>
+
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Endereço" />
+					</f:facet>
+					<h:inputText id="end" name="Endereco" title="Endereco"
+						value="#{item.endereco}" />
+				</rich:column>
+
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Layer" />
+					</f:facet>
+					<h:inputText id="layer" name="Layer" title="Layer"
+						value="#{item.layer}" />
+				</rich:column>
+
+				<rich:column>
+					<f:facet name="header">
+						<h:outputText value="Ações" />
+					</f:facet>
+
+					<a4j:commandButton value="Mostrar Camada"
+						onclick="javaScript:execAdd(#{row});" />
+
+					<rich:toolTip for="editlink" value="Editar" />
+
+
+					<a4j:commandLink ajaxSingle="true" id="deletelink"
+						oncomplete="#{rich:component('deletePanel')}.show()">
+
+						<h:graphicImage value="/imagens/icones/delete.gif"
+							style="border:0" />
+						<f:setPropertyActionListener value="#{item.id}"
+							target="#{manterCamadaMB.id}" />
+					</a4j:commandLink>
+
+
+
+				</rich:column>
+			</rich:dataTable>
+			<rich:spacer height="30" />
+			<rich:datascroller for="auction" maxPages="5" />
+
+		</h:form>
+
+		<h1>Servidor WMS</h1>
+
+		<br />
+		<br />
+		<br />
+
+		<div id="map" class="smallmap"></div>
+
+
+
+
+
+		<rich:modalPanel id="deletePanel" autosized="true" width="200" >
+			<f:facet name="header">
+				<h:outputText value="Apagar"
+					style="padding-right:15px;" />
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/imagens/close.png" styleClass="hidelink"
+						id="hidelink2" />
+					<rich:componentControl for="deletePanel" attachTo="hidelink2"
+						operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+			<h:form>
+				<table width="100%">
+					<tbody>
+						<tr>
+							<td align="center" width="50%">
+							
+							<a4j:commandButton
+									value="Sim" ajaxSingle="true" action="#{manterCamadaMB.deletar}"
+									oncomplete="#{rich:component('deletePanel')}.hide();"
+									reRender="auction" />
+							</td>
+							<td align="center" width="50%"><a4j:commandButton
+									value="Cancelar"
+									onclick="#{rich:component('deletePanel')}.hide();return false;" />
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</h:form>
+		</rich:modalPanel>
+
+
+
+	</body>
+</f:view>
+
+</html>
+
+
+

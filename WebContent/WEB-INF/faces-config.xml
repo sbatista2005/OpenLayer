@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<faces-config version="1.2" xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:xi="http://www.w3.org/2001/XInclude" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-facesconfig_1_2.xsd">
+
+
+	<!-- Facelets support -->
+	<application>
+		<view-handler>com.sun.facelets.FaceletViewHandler</view-handler>
+		 <el-resolver>org.springframework.web.jsf.el.SpringBeanFacesELResolver</el-resolver> 
+	</application>
+
+	<!-- Managed-beans -->
+	<managed-bean>
+		<managed-bean-name>manterCamadaMB</managed-bean-name>
+		<managed-bean-class>br.ucb.sandra.openlayer.MB.ManterCamadaMB</managed-bean-class>
+		<managed-bean-scope>session</managed-bean-scope>
+	</managed-bean>
+	
+	
+	<navigation-rule>
+		<from-view-id>/manterCamada.xhtml</from-view-id>
+				<navigation-case>
+			<from-outcome>success</from-outcome>
+			<to-view-id>/publico/manterCamada.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	
+	<navigation-rule>
+		<from-view-id>/publico/visualizarCamada.xhtml</from-view-id>
+		<navigation-case>
+			<from-outcome>manterCamada</from-outcome>
+			<to-view-id>/publico/manterCamada.xhtml</to-view-id>
+		</navigation-case>
+	</navigation-rule>
+	
+	
+</faces-config>
