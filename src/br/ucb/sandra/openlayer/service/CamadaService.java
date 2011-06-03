@@ -56,11 +56,11 @@ public class CamadaService implements Serializable {
 		return "cadastradoSucesso";
 	}
 
-	public String delete(String id) {
+	public String delete(Camada camada) {
 		logger.debug("Apagando uma Camada");
 
 		try {
-			BasicDBObject item = (BasicDBObject) getDBObject(id);
+			BasicDBObject item = (BasicDBObject) getDBObject(camada.getId());
 			DBCollection coll = MongoDBFactory.getCollection("mapserver",
 					"camada");
 			coll.remove(item);

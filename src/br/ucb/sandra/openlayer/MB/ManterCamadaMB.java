@@ -47,7 +47,8 @@ public class ManterCamadaMB implements Serializable {
 	}
 	
 	public String deletar(){
-		camadaService.delete(this.id);
+		camadaService.delete(this.camada);
+		camadas.remove(camada);
 		return "apagado";
 		
 		

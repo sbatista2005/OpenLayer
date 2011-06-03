@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="ISO-8859-1"?>
+<?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml"
 	xmlns:ui="http://java.sun.com/jsf/facelets"
@@ -124,7 +124,7 @@ div.olControlMousePosition {
 		<h:form id="formResultados">
 
 			<rich:dataTable id="auction" value="#{manterCamadaMB.camadas}"
-				var="item" rows="10" width="100%" rowKeyVar="row"
+				var="item" rows="5" width="100%" rowKeyVar="row"
 				onRowMouseOver="this.style.backgroundColor='#B5F3FB'"
 				onRowMouseOut="this.style.backgroundColor='#FFFFFF'">
 				<f:facet name="caption">
@@ -170,11 +170,9 @@ div.olControlMousePosition {
 
 						<h:graphicImage value="/imagens/icones/delete.gif"
 							style="border:0" />
-						<f:setPropertyActionListener value="#{item.id}"
-							target="#{manterCamadaMB.id}" />
+						<f:setPropertyActionListener value="#{item}"
+							target="#{manterCamadaMB.camada}" />
 					</a4j:commandLink>
-
-
 
 				</rich:column>
 			</rich:dataTable>
@@ -217,7 +215,7 @@ div.olControlMousePosition {
 							<a4j:commandButton
 									value="Sim" ajaxSingle="true" action="#{manterCamadaMB.deletar}"
 									oncomplete="#{rich:component('deletePanel')}.hide();"
-									reRender="auction" />
+									reRender="formResultados" />
 							</td>
 							<td align="center" width="50%"><a4j:commandButton
 									value="Cancelar"
