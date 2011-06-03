@@ -57,18 +57,18 @@ div.olControlMousePosition {
 		map.addLayer(layerWMS);
 	}
 	function execAdd(row) {
-		alert(row);
+		//alert(row);
 		var tituloStr = 'formResultados:auction:' + row + ':titulo';
 		var endStr = 'formResultados:auction:' + row + ':end';
 		var camadaStr = 'formResultados:auction:' + row + ':layer';
 		
 		//titulo = document.getElementById('formID:dataTableId:rowNumber:titulo');
 		var titulo = document.getElementById(tituloStr).value; 
-		alert(titulo);
+		//alert(titulo);
 		var end = document.getElementById(endStr).value;
-		alert(end);
+		//alert(end);
 		var camadas = document.getElementById(camadaStr).value;
-		alert(camadas);
+		//alert(camadas);
 		
 		addWMS(titulo, end , camadas , false);
 	}
