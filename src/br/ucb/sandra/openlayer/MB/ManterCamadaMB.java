@@ -11,6 +11,7 @@ import org.springframework.stereotype.Component;
 
 import br.ucb.sandra.openlayer.negocio.Camada;
 import br.ucb.sandra.openlayer.service.CamadaService;
+import br.ucb.sandra.openlayer.util.FacesUtils;
 
 @Component
 public class ManterCamadaMB implements Serializable {
@@ -35,9 +36,15 @@ public class ManterCamadaMB implements Serializable {
 	@Resource
 	private CamadaService camadaService;
 
-	public String save() throws UnknownHostException {
-		camadaService.salvar(this.camada);
-		listarTodos();
+	public String save() {
+		try {
+			camadaService.salvar(this.camada);
+			listarTodos();
+			//FacesUtils.addSucessMessage("", " INCLUí�DO COM SUCESSO !!");
+		} catch (Exception e) {
+			//FacesUtils.addError("", "CÃ³digo da antena jÃ¡ existe...");
+		}
+
 		return "success";
 	}
 
@@ -45,18 +52,22 @@ public class ManterCamadaMB implements Serializable {
 		this.camadas = camadaService.getAll();
 
 	}
-	
-	public String deletar(){
+
+	public String deletar() {
 		camadaService.delete(this.camada);
 		camadas.remove(camada);
 		return "apagado";
-		
-		
 	}
 
-	 public int getTamanho() {
-	 return camadas.size();
-	 }
+	public String load() {
+		this.camada = camadaService.procura(this.camada);
+
+		return "manterSecao";
+	}
+
+	public int getTamanho() {
+		return camadas.size();
+	}
 
 	public void setCamada(Camada camada) {
 		this.camada = camada;
@@ -90,7 +101,5 @@ public class ManterCamadaMB implements Serializable {
 	public void setId(String id) {
 		this.id = id;
 	}
-
-	
 
 }

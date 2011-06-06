@@ -126,4 +126,29 @@ public class CamadaService implements Serializable {
 		return coll.findOne(doc);
 	}
 
+	public Camada procura(Camada camada) {
+
+		logger.debug("Pesquisando uma Camada");
+		DBCollection coll = MongoDBFactory
+		.getCollection("mapserver", "camada");
+         DBObject doc = new BasicDBObject();
+
+		// Put id to search
+        doc.put("camada", camada);
+        
+        // Find and return the person with the given id
+        DBObject dbObject = coll.findOne(doc);
+		
+		
+        Camada camada_put = new Camada();
+        camada_put.setId(dbObject.get("id").toString());
+        camada_put.setTitulo(dbObject.get("titulo").toString());
+        camada_put.setEndereco(dbObject.get("endereco").toString());
+        camada_put.setLayer(dbObject.get("layer").toString());
+    	
+        // Return person
+		return camada_put;
+
+	}
+
 }

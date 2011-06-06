@@ -21,8 +21,8 @@
 	height: 350px;
 	border: 1px solid gray;
 	width: 100%;
-    z-index:0;
-    position:absolute;
+	z-index: 0;
+	position: absolute;
 }
 
 p {
@@ -84,12 +84,23 @@ div.olControlMousePosition {
 	<body onload="init()">
 
 
-		<a4j:keepAlive beanName="manterCamadaMB"></a4j:keepAlive>
+
+
+
+
+
+
 
 		<h:form id="formCadastrarCamada">
 			<fieldset>
 				<legend>Cadastrar Camada</legend>
-
+				<a4j:region id="regiaoAjax">
+					<a4j:status id="sts">
+						<f:facet name="start">
+							<h:graphicImage value="/imagens/ajax-loader.gif" />
+						</f:facet>
+					</a4j:status>
+				</a4j:region>
 				<h:panelGrid columns="2" id="inputs"
 					columnClasses="coluna1, coluna2">
 
@@ -108,7 +119,7 @@ div.olControlMousePosition {
 						styleClass="edit" size="40" />
 
 					<a4j:commandButton value="Salvar" action="#{manterCamadaMB.save}"
-						status="sts" reRender="inputs, messages, formResultados"
+						status="sts" reRender="inputs, messages,formResultados"
 						styleClass="botoes"
 						oncomplete="Richfaces.showModalPanel('mensagem')" />
 
@@ -118,17 +129,13 @@ div.olControlMousePosition {
 			</fieldset>
 		</h:form>
 
-
-
-
 		<h:form id="formResultados">
-
 			<rich:dataTable id="auction" value="#{manterCamadaMB.camadas}"
 				var="item" rows="5" width="100%" rowKeyVar="row"
 				onRowMouseOver="this.style.backgroundColor='#B5F3FB'"
 				onRowMouseOut="this.style.backgroundColor='#FFFFFF'">
 				<f:facet name="caption">
-					Registros encontrados: 
+					Registros encontrados:
 				</f:facet>
 				<rich:column>
 					<f:facet name="header">
@@ -162,9 +169,6 @@ div.olControlMousePosition {
 					<a4j:commandButton value="Mostrar Camada"
 						onclick="javaScript:execAdd(#{row});" />
 
-					<rich:toolTip for="editlink" value="Editar" />
-
-
 					<a4j:commandLink ajaxSingle="true" id="deletelink"
 						oncomplete="#{rich:component('deletePanel')}.show()">
 
@@ -174,29 +178,68 @@ div.olControlMousePosition {
 							target="#{manterCamadaMB.camada}" />
 					</a4j:commandLink>
 
+					<h:commandLink id="editlink" action="#{manterCamadaMB.load}">
+						<h:graphicImage value="/imagens/icones/edit.gif" style="border:0" />
+						<f:setPropertyActionListener value="#{item}"
+							target="#{manterSecaoMB.camada}" />
+					</h:commandLink>
+
 				</rich:column>
 			</rich:dataTable>
 			<rich:spacer height="30" />
 			<rich:datascroller for="auction" maxPages="5" />
-
 		</h:form>
 
-		<h1>Servidor WMS</h1>
+		<h1>Visualização no Mapa</h1>
 
 		<br />
-		<br />
-		<br />
-
 		<div id="map" class="smallmap"></div>
 
 
 
-
-
-		<rich:modalPanel id="deletePanel" autosized="true" width="200" >
+		<rich:modalPanel id="mensagem" height="150" width="300" zindex="2000">
 			<f:facet name="header">
-				<h:outputText value="Apagar"
-					style="padding-right:15px;" />
+				<h:panelGroup>
+					<h:outputText value="Mensagens"></h:outputText>
+				</h:panelGroup>
+			</f:facet>
+			<f:facet name="controls">
+				<h:panelGroup>
+					<h:graphicImage value="/imagens/close.png" styleClass="hidelink"
+						id="hidelink" />
+					<rich:componentControl for="mensagem" attachTo="hidelink"
+						operation="hide" event="onclick" />
+				</h:panelGroup>
+			</f:facet>
+
+			<rich:messages id="message" style="color:red" layout="table"
+				tooltip="true" showDetail="false" showSummary="true">
+				<f:facet name="errorMarker">
+					<h:graphicImage url="/imagens/icones/error.png" width="16"
+						height="16" />
+				</f:facet>
+				<f:facet name="infoMarker">
+					<h:graphicImage url="/imagens/icones/sucesso.png" width="16"
+						height="16" />
+				</f:facet>
+				<f:facet name="sucessMarker">
+					<h:graphicImage url="/imagens/icones/sucesso.png" width="16"
+						height="16" />
+				</f:facet>
+			</rich:messages>
+
+			<rich:spacer height="30" />
+			<a4j:commandButton value="OK"
+				onclick="#{rich:component('mensagem')}.hide();return false;" />
+
+		</rich:modalPanel>
+
+
+
+		<!--Modal para Deletar um registro -->
+		<rich:modalPanel id="deletePanel" autosized="true" width="200">
+			<f:facet name="header">
+				<h:outputText value="Apagar" style="padding-right:15px;" />
 			</f:facet>
 			<f:facet name="controls">
 				<h:panelGroup>
@@ -210,13 +253,11 @@ div.olControlMousePosition {
 				<table width="100%">
 					<tbody>
 						<tr>
-							<td align="center" width="50%">
-							
-							<a4j:commandButton
-									value="Sim" ajaxSingle="true" action="#{manterCamadaMB.deletar}"
+							<td align="center" width="50%"><a4j:commandButton
+									value="Sim" ajaxSingle="true"
+									action="#{manterCamadaMB.deletar}"
 									oncomplete="#{rich:component('deletePanel')}.hide();"
-									reRender="formResultados" />
-							</td>
+									reRender="formResultados" /></td>
 							<td align="center" width="50%"><a4j:commandButton
 									value="Cancelar"
 									onclick="#{rich:component('deletePanel')}.hide();return false;" />

@@ -2,6 +2,6 @@
 <html>
 <head></head>
 	<body>
-		<jsp:forward page="/publico/index.jsf" />
+		<jsp:forward page="/publico/manterCamada.jsf" />
 	</body>
 </html>

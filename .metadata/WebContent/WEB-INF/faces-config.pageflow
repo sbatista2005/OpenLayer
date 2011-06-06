@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf13061711423710" configfile="/ProjetoSandraMapserver/WebContent/WEB-INF/faces-config.xml">
-  <nodes xsi:type="pageflow:PFPage" name="publico/visualizarCamada.xhtml" id="pf13062455478010" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf13062455478011" path="/publico/visualizarCamada.xhtml"/>
-  <nodes xsi:type="pageflow:PFPage" name="publico/manterCamada.xhtml" id="pf13062455478012" referenceLink="//@navigationRule.0/@navigationCase.0/@toViewId|" inlinks="pf13062455478011 pf13062456497005" path="/publico/manterCamada.xhtml"/>
+<pageflow:Pageflow xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:pageflow="http://www.sybase.com/suade/pageflow" id="pf13061711423710" configfile="/ProjetoSandraOpenLayer/WebContent/WEB-INF/faces-config.xml">
+  <nodes xsi:type="pageflow:PFPage" name="publico/visualizarCamada.xhtml" id="pf13062455478010" referenceLink="//@navigationRule.1/@fromViewId|" outlinks="pf13062455478011" path="/publico/visualizarCamada.xhtml"/>
+  <nodes xsi:type="pageflow:PFPage" name="publico/manterCamada.xhtml" id="pf13062455478012" referenceLink="//@navigationRule.1/@navigationCase.0/@toViewId|" inlinks="pf13062455478011 pf13062456497005" path="/publico/manterCamada.xhtml"/>
   <nodes xsi:type="pageflow:PFPage" name="manterCamada.xhtml" id="pf13062456497016" referenceLink="//@navigationRule.0/@fromViewId|" outlinks="pf13062456497005" path="/manterCamada.xhtml"/>
   <links id="pf13062455478011" target="pf13062455478012" source="pf13062455478010" outcome="manterCamada"/>
   <links id="pf13062456497005" target="pf13062455478012" source="pf13062456497016" outcome="success"/>
