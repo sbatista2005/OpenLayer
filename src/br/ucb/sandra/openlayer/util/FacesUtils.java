@@ -18,13 +18,6 @@ import javax.servlet.http.HttpServletResponse;
 
 import org.apache.commons.beanutils.BeanUtils;
 
-/**
- * Pós Graduação Lato Sensu em Sistemas Orientados a Objeto Universidade
- * Católica de Brasília
- * 
- * @author eliezer eliezer.melo@gmail.com
- * 
- */
 public class FacesUtils {
 
 	public static void addInfoMessage(String msg) {
